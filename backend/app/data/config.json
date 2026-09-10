@@ -1,0 +1,12 @@
+{
+  "_label": "Heuristic / demo thresholds. These bands are chosen for the SIH 2026 prototype walkthrough and are NOT calibrated psychometric cut-offs. Tune them per domain before any real use.",
+  "separability_method": "Jensen-Shannon divergence with log base 2 (symmetric, bounded in [0,1]).",
+  "overall_separability_weighting": "Equal weight across all target-state pairs (unweighted arithmetic mean of pairwise JSD).",
+  "high_threshold": 0.70,
+  "medium_threshold": 0.40,
+  "bands": {
+    "HIGH": "overall_separability >= high_threshold",
+    "MEDIUM": "medium_threshold <= overall_separability < high_threshold",
+    "LOW": "overall_separability < medium_threshold"
+  }
+}
