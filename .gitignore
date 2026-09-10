@@ -1,0 +1,32 @@
+# ---- Node / frontend ----
+node_modules/
+frontend/dist/
+dist/
+dist-ssr/
+*.local
+
+# ---- Python / backend ----
+backend/.venv/
+.venv/
+__pycache__/
+*.pyc
+*.py[cod]
+.pytest_cache/
+.python-version
+
+# ---- Environment files (never commit real config; .env.example is committed) ----
+.env
+.env.*
+!.env.example
+
+# ---- Build artifacts / tooling ----
+*.tsbuildinfo
+coverage/
+build/
+
+# ---- OS / editor cruft ----
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp
