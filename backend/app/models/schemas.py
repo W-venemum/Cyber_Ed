@@ -11,6 +11,22 @@ from pydantic import BaseModel, Field
 from app.models.domain import Assessment
 
 
+class ThresholdConfig(BaseModel):
+    """Heuristic separability band cut-offs, sourced from config.json.
+
+    Exposed so the frontend can label bands using the same thresholds the
+    engine uses, instead of hardcoding cut-offs in React.
+    """
+
+    high_threshold: float = Field(
+        ..., description="Overall separability >= this is HIGH."
+    )
+    medium_threshold: float = Field(
+        ..., description="Overall separability >= this (but < high) is MEDIUM."
+    )
+    label: str
+
+
 class PairwiseSeparation(BaseModel):
     """Separability between one pair of misconception states on an item."""
 
@@ -106,7 +122,10 @@ class AssessmentAudit(BaseModel):
     item_count: int
     items: list[ItemAuditSummary]
     band_counts: dict[str, int]
-    blind_spot_count: int
+    low_power_item_count: int = Field(
+        ...,
+        description="Number of items whose overall separability falls in the LOW band.",
+    )
 
 
 class AssessmentSummary(BaseModel):
@@ -117,7 +136,7 @@ class AssessmentSummary(BaseModel):
     domain: str
     item_count: int
     audit_status: str
-    blind_spot_count: int
+    low_power_item_count: int
     last_analyzed: str
 
 

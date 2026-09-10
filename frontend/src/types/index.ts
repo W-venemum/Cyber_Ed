@@ -98,7 +98,8 @@ export interface AssessmentAudit {
   item_count: number;
   items: ItemAuditSummary[];
   band_counts: Record<PowerBand, number>;
-  blind_spot_count: number;
+  /** Count of items whose overall separability falls in the LOW band. */
+  low_power_item_count: number;
 }
 
 export interface AssessmentSummary {
@@ -107,8 +108,15 @@ export interface AssessmentSummary {
   domain: string;
   item_count: number;
   audit_status: string;
-  blind_spot_count: number;
+  low_power_item_count: number;
   last_analyzed: string;
+}
+
+/** Heuristic band cut-offs sourced from the backend config (config.json). */
+export interface ThresholdConfig {
+  high_threshold: number;
+  medium_threshold: number;
+  label: string;
 }
 
 export interface CandidateScore {

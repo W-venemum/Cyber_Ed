@@ -15,7 +15,37 @@ def test_list_assessments(client):
     data = resp.json()
     assert len(data) == 1
     assert data[0]["id"] == "fractions-demo"
-    assert data[0]["blind_spot_count"] >= 1
+    assert data[0]["low_power_item_count"] >= 1
+
+
+def test_threshold_config_endpoint(client):
+    resp = client.get("/api/config/thresholds")
+    assert resp.status_code == 200
+    data = resp.json()
+    # Sourced from config.json, not hardcoded in the frontend.
+    assert data["high_threshold"] == 0.70
+    assert data["medium_threshold"] == 0.40
+    assert data["high_threshold"] > data["medium_threshold"]
+    assert isinstance(data["label"], str) and data["label"]
+
+
+def test_reset_route_makes_apply_repair_idempotent(client):
+    baseline = client.get("/api/assessments/fractions-demo/audit").json()
+    baseline_count = baseline["item_count"]
+
+    # apply-repair mutates the process-wide store, growing the assessment.
+    client.post("/api/items/Q3/apply-repair")
+    mutated = client.get("/api/assessments/fractions-demo/audit").json()
+    assert mutated["item_count"] == baseline_count + 1
+
+    # reset rolls the store back to the seeded baseline.
+    resp = client.post("/api/reset")
+    assert resp.status_code == 200
+    assert resp.json()["status"] == "reset"
+    assert resp.json()["item_count"] == baseline_count
+
+    after_reset = client.get("/api/assessments/fractions-demo/audit").json()
+    assert after_reset["item_count"] == baseline_count
 
 
 def test_states_endpoint(client):

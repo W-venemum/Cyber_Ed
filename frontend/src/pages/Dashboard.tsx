@@ -88,8 +88,8 @@ export function Dashboard() {
                 accent="bad"
               />
               <StatCard
-                label="Blind spots found"
-                value={data.blind_spot_count}
+                label="Low-power items"
+                value={data.low_power_item_count}
                 accent="bad"
               />
               <StatCard

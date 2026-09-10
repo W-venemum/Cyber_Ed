@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { getItemAudit, getStates } from "../api/client";
+import { getItemAudit, getStates, getThresholds } from "../api/client";
 import { Card, CardHeader } from "../components/Card";
 import { DistributionBars } from "../components/DistributionBars";
 import { ErrorBox, Loading, Sep } from "../components/Feedback";
@@ -15,11 +15,12 @@ export function ItemAuditor() {
 
   const { data, loading, error, reload } = useApi(
     async () => {
-      const [audit, states] = await Promise.all([
+      const [audit, states, thresholds] = await Promise.all([
         getItemAudit(id),
         getStates(),
+        getThresholds(),
       ]);
-      return { audit, states };
+      return { audit, states, thresholds };
     },
     [id],
   );
@@ -299,9 +300,10 @@ export function ItemAuditor() {
                                 {p.separability.toFixed(4)}
                               </td>
                               <td className="py-2 text-slate-500">
-                                {p.separability >= 0.7
+                                {p.separability >= data.thresholds.high_threshold
                                   ? "well separated"
-                                  : p.separability >= 0.4
+                                  : p.separability >=
+                                      data.thresholds.medium_threshold
                                     ? "partially separated"
                                     : "hard to distinguish"}
                               </td>

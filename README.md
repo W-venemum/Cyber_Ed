@@ -213,14 +213,16 @@ All routes are mounted under `/api`:
 | Method | Path | Purpose |
 | ------ | ---- | ------- |
 | `GET` | `/api/health` | Service health check. |
+| `GET` | `/api/config/thresholds` | Heuristic band cut-offs from `config.json` (so the UI never hardcodes thresholds). |
 | `GET` | `/api/states` | List misconception states (M1-M4). |
-| `GET` | `/api/assessments` | List assessments with audit summary (blind-spot counts). |
+| `GET` | `/api/assessments` | List assessments with audit summary (low-power item counts). |
 | `GET` | `/api/assessments/{id}` | Fetch a single assessment and its items. |
 | `GET` | `/api/assessments/{id}/audit` | Full audit: per-item separability, power bands, weakest pairs. |
 | `GET` | `/api/items/{id}/audit` | Diagnostic analysis for one item (separability, blind spots, observed distribution). |
 | `GET` | `/api/items/{id}/candidates` | Ranked repair candidates for an item, with predicted separability. |
 | `GET` | `/api/items/{id}/mappings` | Misconception → answer-option distributions for an item. |
 | `POST` | `/api/items/{id}/apply-repair` | Apply a repair candidate and return the BEFORE → AFTER comparison. |
+| `POST` | `/api/reset` | Rebuild the in-memory store from seeded data, so repeated demos are idempotent. |
 
 ## Engine functions
 

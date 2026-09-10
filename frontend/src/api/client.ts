@@ -12,6 +12,7 @@ import type {
   MisconceptionResponseMapping,
   MisconceptionState,
   RepairRecommendation,
+  ThresholdConfig,
 } from "../types";
 
 export const API_BASE_URL =
@@ -56,6 +57,9 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
 
 export const getHealth = () => request<HealthResponse>("/health");
 
+export const getThresholds = () =>
+  request<ThresholdConfig>("/config/thresholds");
+
 export const getStates = () => request<MisconceptionState[]>("/states");
 
 export const getItemMappings = (itemId: string) =>
@@ -91,3 +95,9 @@ export const applyRepair = (itemId: string, candidateId?: string) => {
     { method: "POST" },
   );
 };
+
+export const resetStore = () =>
+  request<{ status: string; assessment_id: string; item_count: number }>(
+    "/reset",
+    { method: "POST" },
+  );

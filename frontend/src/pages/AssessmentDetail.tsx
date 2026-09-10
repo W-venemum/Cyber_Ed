@@ -44,8 +44,8 @@ export function AssessmentDetail() {
             </h1>
             <p className="mt-1 text-sm text-slate-600">
               Domain: {data.assessment.domain} · {data.audit.item_count} items ·{" "}
-              {data.audit.blind_spot_count} blind spot
-              {data.audit.blind_spot_count === 1 ? "" : "s"} ·{" "}
+              {data.audit.low_power_item_count} low-power item
+              {data.audit.low_power_item_count === 1 ? "" : "s"} ·{" "}
               {data.audit.band_counts.HIGH} high / {data.audit.band_counts.MEDIUM}{" "}
               medium / {data.audit.band_counts.LOW} low
             </p>

@@ -41,10 +41,12 @@ app = FastAPI(
     version="1.0.0",
 )
 
+# No credentials: the API uses no auth or cookies, and wildcard
+# methods/headers are incompatible with allow_credentials in browsers.
 app.add_middleware(
     CORSMiddleware,
     allow_origins=ALLOWED_ORIGINS,
-    allow_credentials=True,
+    allow_credentials=False,
     allow_methods=["*"],
     allow_headers=["*"],
 )

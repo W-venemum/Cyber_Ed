@@ -11,7 +11,7 @@ from datetime import datetime, timezone
 
 from fastapi import APIRouter, Depends, HTTPException
 
-from app.data_store import DataStore, get_store
+from app.data_store import DataStore, get_store, reset_store
 from app.engine import diagnostics
 from app.engine.config import load_thresholds
 from app.models.domain import (
@@ -29,6 +29,7 @@ from app.models.schemas import (
     ItemAuditSummary,
     ObservedDistribution,
     RepairRecommendation,
+    ThresholdConfig,
 )
 
 router = APIRouter(prefix="/api")
@@ -48,6 +49,21 @@ def store_dep() -> DataStore:
 @router.get("/health")
 def health() -> dict:
     return {"status": "ok", "service": "assessment-auditor"}
+
+
+# ---- config -------------------------------------------------------------
+
+
+@router.get("/config/thresholds", response_model=ThresholdConfig)
+def get_threshold_config() -> ThresholdConfig:
+    """Expose the heuristic band cut-offs so the frontend labels bands using
+    the same thresholds as the engine (no hardcoded cut-offs in React)."""
+    thresholds = load_thresholds()
+    return ThresholdConfig(
+        high_threshold=thresholds.high_threshold,
+        medium_threshold=thresholds.medium_threshold,
+        label=thresholds.label,
+    )
 
 
 # ---- states & mappings (misconception map screen) -----------------------
@@ -75,7 +91,7 @@ def _assessment_audit(store: DataStore, assessment: Assessment) -> AssessmentAud
     thresholds = load_thresholds()
     summaries: list[ItemAuditSummary] = []
     band_counts = {"HIGH": 0, "MEDIUM": 0, "LOW": 0}
-    blind_spot_count = 0
+    low_power_item_count = 0
     for item in assessment.items:
         dist = store.get_distributions(item.id)
         if dist is None:
@@ -83,7 +99,7 @@ def _assessment_audit(store: DataStore, assessment: Assessment) -> AssessmentAud
         analysis = diagnostics.analyze_item(item, dist, thresholds)
         band_counts[analysis.power_band] += 1
         if analysis.power_band == "LOW":
-            blind_spot_count += 1
+            low_power_item_count += 1
         summaries.append(
             ItemAuditSummary(
                 item_id=item.id,
@@ -100,7 +116,7 @@ def _assessment_audit(store: DataStore, assessment: Assessment) -> AssessmentAud
         item_count=len(assessment.items),
         items=summaries,
         band_counts=band_counts,
-        blind_spot_count=blind_spot_count,
+        low_power_item_count=low_power_item_count,
     )
 
 
@@ -114,7 +130,7 @@ def list_assessments(store: DataStore = Depends(store_dep)) -> list[AssessmentSu
             domain=store.assessment.domain,
             item_count=audit.item_count,
             audit_status="analyzed",
-            blind_spot_count=audit.blind_spot_count,
+            low_power_item_count=audit.low_power_item_count,
             last_analyzed=_ANALYZED_AT,
         )
     ]
@@ -268,3 +284,22 @@ def apply_repair(
             f"original item."
         ),
     )
+
+
+# ---- reset --------------------------------------------------------------
+
+
+@router.post("/reset")
+def reset() -> dict:
+    """Rebuild the in-memory store from the seeded JSON data.
+
+    ``apply-repair`` mutates the process-wide singleton store (prototype
+    shortcut), so this route rolls it back to the seeded baseline to make the
+    demo idempotent across repeated walkthroughs.
+    """
+    store = reset_store()
+    return {
+        "status": "reset",
+        "assessment_id": store.assessment.id,
+        "item_count": len(store.assessment.items),
+    }

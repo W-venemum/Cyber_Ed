@@ -31,7 +31,7 @@ export function Assessments() {
                   <th className="px-5 py-3 font-medium">Domain</th>
                   <th className="px-5 py-3 font-medium">Items</th>
                   <th className="px-5 py-3 font-medium">Status</th>
-                  <th className="px-5 py-3 font-medium">Blind spots</th>
+                  <th className="px-5 py-3 font-medium">Low-power items</th>
                   <th className="px-5 py-3 font-medium">Last analyzed</th>
                   <th className="px-5 py-3 font-medium">Actions</th>
                 </tr>
@@ -50,7 +50,7 @@ export function Assessments() {
                       </span>
                     </td>
                     <td className="px-5 py-3 text-slate-600">
-                      {a.blind_spot_count}
+                      {a.low_power_item_count}
                     </td>
                     <td className="px-5 py-3 text-slate-500">
                       {a.last_analyzed}
