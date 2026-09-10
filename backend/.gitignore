@@ -1,0 +1,6 @@
+# Python virtual environment and caches (backend-scoped)
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.python-version

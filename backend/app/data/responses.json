@@ -1,0 +1,22 @@
+{
+  "_note": "Illustrative demo responses. These counts are hand-authored for the prototype walkthrough and are NOT real student data. They exist only to visualise observed answer distributions on the dashboard.",
+  "label": "Illustrative demo responses",
+  "responses": [
+    {
+      "itemId": "Q1",
+      "totalResponses": 12,
+      "counts": { "A": 8, "B": 2, "C": 1, "D": 1 }
+    },
+    {
+      "itemId": "Q2",
+      "totalResponses": 12,
+      "counts": { "A": 6, "B": 3, "C": 2, "D": 1 }
+    },
+    {
+      "itemId": "Q3",
+      "totalResponses": 12,
+      "counts": { "A": 6, "B": 4, "C": 2, "D": 0 },
+      "_note": "Illustrative demo responses for Q3: mastery answer 3/4 (option A) chosen by 6, denominator-addition answer 3/6 (option B, M2) by 4, procedure-error answer 1/6 (option C, M4) by 2. Because Q3 cannot separate M2 from M4, the B and C answers are diagnostically ambiguous."
+    }
+  ]
+}

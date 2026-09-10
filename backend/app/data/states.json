@@ -1,0 +1,24 @@
+{
+  "states": [
+    {
+      "id": "M1",
+      "name": "Mastery",
+      "description": "Correct reasoning. The learner finds a common denominator, converts both fractions, and adds only the numerators, producing the correct sum."
+    },
+    {
+      "id": "M2",
+      "name": "Denominator-addition misconception",
+      "description": "The learner adds numerators together and denominators together (a/b + c/d = (a+c)/(b+d)), a very common early error when adding fractions."
+    },
+    {
+      "id": "M3",
+      "name": "Numerator-addition misconception",
+      "description": "The learner keeps a denominator but adds numerators without finding a common denominator, or otherwise mishandles the numerator/denominator relationship."
+    },
+    {
+      "id": "M4",
+      "name": "Procedure error",
+      "description": "The learner attempts a valid overall strategy (e.g. common denominators) but slips on a step such as scaling, giving a result that can look similar to the denominator-addition answer."
+    }
+  ]
+}
